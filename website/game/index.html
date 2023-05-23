@@ -1,0 +1,333 @@
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    * {
+      font-family: 'Press Start 2P', cursive;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1E1E1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body * {
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+
+<style>
+  .circle {
+    --dimension: 600px;
+    width: var(--dimension);
+    height: var(--dimension);
+    filter: blur(60px);
+    position: absolute;
+    border-radius: 100%;
+  }
+  .circle:nth-child(1) {
+    background-color: rgba(196, 181, 253, .5);
+    top: 50px;
+    -webkit-animation: blob 7s infinite;
+            animation: blob 7s infinite;
+  }
+  .circle:nth-child(2) {
+    background-color: rgba(252, 211, 77, .5);
+    bottom: 50px;
+    left: 10%;
+    animation-delay: 1s;
+    -webkit-animation: blob 7s infinite;
+            animation: blob 7s infinite;
+            animation-delay: 5s;
+
+  }
+  .circle:nth-child(3) {
+    background-color: rgba(249, 168, 212, .5);
+    bottom: 50px;
+    right: 10%;
+    -webkit-animation: blob 7s infinite;
+            animation: blob 7s infinite;
+            animation-delay: 10s;
+  }
+
+  @keyframes blob {
+  0% {
+    transform: translate(0px ,0px) scale(1);
+    opacity: .7;
+  }
+
+  33% {
+    transform: translate(30px ,-50px) scale(1.1);
+    opacity: 1;
+  }
+
+  66% {
+    transform: translate(-20px ,20px) scale(0.9);
+    opacity: .7;
+  }
+
+  100% {
+    transform: translate(0px ,0px) scale(1);
+    opacity: .7;
+  }
+}
+</style>
+<div class="circle-container" style="position: absolute; width: 100vw; height: 100vh;z-index: 0; display: flex;justify-content: center;align-items: center;">
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+</div>
+
+
+<!-- Back Button -->
+<style>
+  .back-button-container {
+    --margin: 40px;
+    position: absolute;
+    top: var(--margin);
+    left: var(--margin);
+  }
+  .back-button-container a {
+    color: #CDCDCD;
+    padding: 15px;
+    border-radius: 100%;
+    font-size: 22px;
+  }
+  .back-button-container a i {
+    transition: all .3s cubic-bezier(.215, .61, .355, 1);
+  }
+  .back-button-container a i:hover {
+    transform: translateX(-3px);
+  }
+</style>
+<div class="back-button-container">
+  <a href="../index.html"><i class="fa-sharp fa-solid fa-chevron-left"></i></a>
+</div>
+
+
+
+<div style="display: inline-block; position: relative">
+  <div
+    id="overlappingDiv"
+    style="
+      background-color: black;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    "
+  ></div>
+
+  <canvas class="reveal"></canvas>
+  <div
+    id="characterDialogueBox"
+    style="
+      background-color: white;
+      height: 140px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 4px black solid;
+      display: none;
+      padding: 12px;
+    "
+  ></div>
+
+  <div id="userInterface" style="display: none">
+    <!-- Represents health bar of draggle (enemy) -->
+    <div
+      style="
+        background-color: white;
+        width: 250px;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        border: 4px black solid;
+        padding: 12px;
+      "
+    >
+      <h1 style="font-size: 16px">Draggle</h1>
+      <div style="position: relative">
+        <div
+          style="height: 5px; background-color: #ccc; margin-top: 10px"
+        ></div>
+        <div
+          id="enemyHealthBar"
+          style="
+            height: 5px;
+            background-color: green;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <!-- Represents health bar of emby (us) -->
+    <div
+      style="
+        background-color: white;
+        width: 250px;
+        position: absolute;
+        top: 330px;
+        right: 50px;
+        border: 4px black solid;
+        padding: 12px;
+      "
+    >
+      <h1 style="font-size: 16px">Emby</h1>
+      <div style="position: relative">
+        <div
+          style="height: 5px; background-color: #ccc; margin-top: 10px"
+        ></div>
+        <div
+          id="playerHealthBar"
+          style="
+            height: 5px;
+            background-color: green;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <div
+      style="
+        background-color: white;
+        height: 140px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-top: 4px black solid;
+        display: flex;
+      "
+    >
+      <div
+        id="dialogueBox"
+        style="
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-color: white;
+          padding: 12px;
+          display: none;
+          cursor: pointer;
+        "
+      >
+        sdkfjlsdajl
+      </div>
+      <div
+        id="attacksBox"
+        style="
+          width: 66.66%;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+        "
+      ></div>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 33.33%;
+          border-left: 4px black solid;
+        "
+      >
+        <h1 id="attackType" style="font-size: 16px">Attack Type</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<a href="../rank.html" class="rank-button reveal">Visualizza la classifica</a>
+<style>
+  .rank-button {
+    position: fixed;
+    display: block;
+    bottom: 40px;
+
+    color: #fff;
+    text-decoration: none;
+
+    background-color: #f33a3a;
+    padding: 20px;
+
+    transition: all .4s cubic-bezier(.215, .61, .355, 1);
+  }
+  .rank-button:hover {
+    bottom: 47px;
+  }
+</style>
+
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+  integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
+  integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="data/audio.js"></script>
+<script src="data/battleZones.js"></script>
+<script src="data/collisions.js"></script>
+<script src="data/attacks.js"></script>
+<script src="data/monsters.js"></script>
+<script src="data/characters.js"></script>
+<script src="js/utils.js"></script>
+<script src="classes.js"></script>
+<script src="index.js"></script>
+<script src="battleScene.js"></script>
+
+
+<script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+<script>
+  ScrollReveal().reveal('.circle', { opacity: 0, duration: 5000 });
+  ScrollReveal().reveal('.reveal', { scale: 0, duration: 3000 });
+  document.body.style.overflow = "hidden";
+</script>
